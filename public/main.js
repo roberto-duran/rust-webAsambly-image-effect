@@ -8,8 +8,6 @@ async function init(){
         return;
     }
 
-    console.log(rustApp)
-
     const input = document.getElementById('upload')
     const fileReader = new FileReader()
 
@@ -17,9 +15,11 @@ async function init(){
         let base64 = fileReader.result.replace(
             /^data:image\/(png|jpeg|jpg);base64,/, ''
         )
-        console.log(input.files[0])
-        let img_data_url = rustApp.grayscale(base64)
+
+        const imgEffect = document.querySelector('input[name="effect"]:checked').value
+        let img_data_url = rustApp.img_effect(base64, imgEffect)
         document.getElementById('new-img').setAttribute('src', img_data_url)
+        document.getElementById('upload').value= null;
     }
 
     input.addEventListener('change', () => {

@@ -5,7 +5,7 @@ use image::load_from_memory;
 use image::ImageOutputFormat::Png;
 
 #[wasm_bindgen]
-pub fn grayscale(encode_file: &str) -> String {
+pub fn img_effect(encode_file: &str, effect: &str) -> String {
     log(&"Grayscale called".into());
     let base64_to_vector = decode(encode_file).unwrap();
     log(&"Image decoded".into());
@@ -13,8 +13,16 @@ pub fn grayscale(encode_file: &str) -> String {
     let mut img = load_from_memory(&base64_to_vector).unwrap();
     log(&"Image loaded".into());
 
-    img = img.grayscale();
+
+    img = match effect {
+        "blur" => img.blur(1.5),
+        "flipv" => img.flipv(),
+        "fliph" =>  img.rotate90(),
+        _ => img.grayscale()
+    };
+
     log(&"Grayscale effect applied".into());
+    log(&effect.into());
 
     let mut buffer = vec![];
     img.write_to(&mut buffer, Png).unwrap();
